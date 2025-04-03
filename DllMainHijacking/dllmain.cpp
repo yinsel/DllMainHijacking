@@ -334,6 +334,7 @@ VOID UNLOOK()
     hookAddr = (size_t)GetProcAddress((HMODULE)hModule, "LdrGetDllFullName");
     if (hookAddr > 0) {
 #ifdef _WIN64
+        // 适配Win11 24H2
         if (buildNumber >= 26100) {
             addr = memFind((BYTE*)hookAddr, (unsigned char*)win11_24h2_staic_lock_flag, (size_t)hookAddr + 0x200, sizeof(win11_24h2_staic_lock_flag));
         } else {
