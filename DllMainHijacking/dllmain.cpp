@@ -1,10 +1,13 @@
 ﻿#include <Windows.h>
 #include <stdio.h>
 
+typedef NTSTATUS(NTAPI* RtlGetVersionFunc)(_Out_ PVOID VersionInformation);
+
 DWORD GetWindowsBuildNumber() {
     OSVERSIONINFOEXW osInfo;
     memset(&osInfo, 0, sizeof(OSVERSIONINFOEXW));
-    if (RtlGetVersion(&osInfo) == 0) {
+    RtlGetVersionFunc pRtlGetVersionFunc = (RtlGetVersionFunc)GetProcAddress(GetModuleHandleA("ntdll.dll"), "RtlGetVersion");
+    if (pRtlGetVersionFunc(&osInfo) == 0) {
         return osInfo.dwBuildNumber;
     }
     return NULL;
